@@ -143,8 +143,56 @@ def purchases():
     print "AFTER ALL YOUR PURCHASES, YOU NOW HAVE", cashleft, "DOLLARS LEFT"
     print "\n"
     print "MONDAY MARCH 29 1847"
-instructions()
-purchases()
+    print "\n"
+
+def beginturn():
+    if food < 0:
+        food = 0
+    if ammo < 0:
+        ammo = 0
+    if clothing < 0:
+        clothing = 0
+    if misc <0:
+        misc = 0
+    if food < 12:
+        print "YOU'D BETTER DO SOME HUNTING OR BUY FOOD AND SOON!!!!"
+    global turnmilage
+    turnmilage = totalmilage
+    if illnessflag == 1 or injuryflag == 1:
+        cashleft -= 20
+        if cashleft < 0:
+            cashleft = 0
+            die()
+            
+def die():
+    print "YOU CAN'T AFFORD A DOCTOR"
+    if injuryflag == 1:
+        deathcause = "INJURIES"
+    else:
+        deathcause = "PNEUMONIA"
+
+    print "YOU DIED OF ", deathcause
+    print "\n"
+    print "DO TO YOUR UNFORTUNATE SITUATION, THERE ARE A FEW"
+    print "FORMALITIES WE MUST GO THROUGH"
+    print "\n"
+    print "WOULD YOU LIKE A MINISTER?"
+    answer = input
+    print "WOULD YOU LIKE A FANCY FUNERAL?"
+    answer = input
+    print "WOULD YOU LIKE US TO INFORM YOUR NEXT OF KIN?"
+    answer = input
+    print "YOUR AUNT NELLIE IN ST. LOUIS IS ANXIOUS TO HEAR"
+    print "\n"
+    print "WE THANK YOU FOR THIS INFORMATION AND WE ARE SORRY YOU"
+    print "DIDN'T MAKE IT TO THE GREAT TERRITORY OF OREGON"
+    print "BETTER LUCK NEXT TIME"
+    print "\n\n"
+    print "\t\t\t\tSINCERELY"
+
+die()
+#instructions()
+#purchases()
 
 
 """

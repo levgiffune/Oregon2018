@@ -207,7 +207,7 @@ def askstopchoice(fortflag):
     if choice == 1:
         stopatfort()
     elif choice == 2:
-        hunt()
+        hunt(ammo, food)
     elif choice == 3:
         return
     else:
@@ -217,13 +217,13 @@ def die(injuryflag, cause="injorill"):
     if cause == "starvation":
         print "YOU RAN OUT OF FOOD AND STARVED TO DEATH"
         deathcause == "STARVATION"
-    elif cause == "injorill"
+    elif cause == "injorill":
         print "YOU CAN'T AFFORD A DOCTOR"
         if injuryflag == 1:
             deathcause = "INJURIES"
         else:
             deathcause = "PNEUMONIA"
-    print "YOU DIED OF ", deathcause
+        print "YOU DIED OF ", deathcause
     else:
         return
     
@@ -261,7 +261,12 @@ def stopatfort(food, ammo, clothing, misc, cashleft):
     
     
 
-
+def hunt(ammo, food):
+    if ammo < 39:
+        print "TOUGH---YOU NEED MORE BULLETS TO GO HUNTING"
+        askstopchoice(fortflag)
+        return
+    totalmilage -= 45
 
 instructions()
 purchases()

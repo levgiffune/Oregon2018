@@ -134,7 +134,7 @@ def purchases():
     askmisc()
     global cashleft
     global ammo
-    cashleft = cashleft - animals - food - ammo - clothing - misc
+    cashleft = 700 - animals - food - ammo - clothing - misc
     if cashleft < 0:
         print "\n\n"
         print "YOU OVERSPENT--YOU ONLY HAD $700 TO SPEND.  BUY AGAIN"

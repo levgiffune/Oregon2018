@@ -124,6 +124,18 @@ def askmisc():
     else:
         print "IMPOSSIBLE"
         askmisc()
+        
+def askfort(string, cashleft):
+    print string
+    number = input()
+    if number < 0:
+        return
+    cashleft -= number
+    if cashleft < 0:
+        print "YOU DON'T HAVE THAT MUCH--KEEP YOUR SPENDING DOWN"
+        cashleft += number
+        number = 0 
+    return number
 
 def purchases():
     print "\n\n"
@@ -162,7 +174,7 @@ def beginturn(food, ammo, clothing, misc, illnessflag, injuryflag, southpassmila
         cashleft -= 20
         if cashleft < 0:
             cashleft = 0
-            die()
+            die(injuryflag, "injorill")
         print "DOCTOR'S BILL IS $20"
         illnessflag = injuryflag = 0
     if southpassmilageflag == 1:
@@ -170,7 +182,11 @@ def beginturn(food, ammo, clothing, misc, illnessflag, injuryflag, southpassmila
         southpassmilageflag = 0
     else:
         print "TOTAL MILEAGE IS", totalmilage
-    print "FOOD: ",food, "BULLETS: ",ammo, "CLOTHING: ",clothing, "MISC. SUPP.: ",misc ,"CASH: ",cashleft
+    print "FOOD:",food, "BULLETS:",ammo, "CLOTHING:",clothing, "MISC. SUPP.:",misc ,"CASH:",cashleft
+    askstopchoice(fortflag)
+    eat()
+
+def askstopchoice(fortflag):
     if fortflag != -1:
         fortflag *= -1
         print "DO YOU WANT TO (1) STOP AT THE NEXT FORT, (2) HUNT, "
@@ -180,19 +196,37 @@ def beginturn(food, ammo, clothing, misc, illnessflag, injuryflag, southpassmila
             choice = 3
     else:
         print "DO YOU WANT TO (1) HUNT, OR (2) CONTINUE"
+        choice = input()
         if choice == 1:
-            choice ++
+            choice += 1
         else:
             choice = 2
-            
-def die():
-    print "YOU CAN'T AFFORD A DOCTOR"
-    if injuryflag == 1:
-        deathcause = "INJURIES"
+            choice += 1
+    if choice == 3:
+        fortflag *= -1
+    if choice == 1:
+        stopatfort()
+    elif choice == 2:
+        hunt()
+    elif choice == 3:
+        return
     else:
-        deathcause = "PNEUMONIA"
-
+        askstopchoice(fortflag)
+            
+def die(injuryflag, cause="injorill"):
+    if cause == "starvation":
+        print "YOU RAN OUT OF FOOD AND STARVED TO DEATH"
+        deathcause == "STARVATION"
+    elif cause == "injorill"
+        print "YOU CAN'T AFFORD A DOCTOR"
+        if injuryflag == 1:
+            deathcause = "INJURIES"
+        else:
+            deathcause = "PNEUMONIA"
     print "YOU DIED OF ", deathcause
+    else:
+        return
+    
     print "\n"
     print "DO TO YOUR UNFORTUNATE SITUATION, THERE ARE A FEW"
     print "FORMALITIES WE MUST GO THROUGH"
@@ -212,6 +246,22 @@ def die():
     print "\t\t\t\tSINCERELY"
     print "\t\tTHE OREGON CITY CHAMBER OF COMMERCE"
     exit()
+
+def stopatfort(food, ammo, clothing, misc, cashleft):
+    print "ENTER WHAT YOU WISH TO SPEND ON THE FOLLOWING"
+    num = askfort("FOOD", cashleft)
+    food += foodnum*2/3 
+    num = askfort("AMMUNITION", cashleft)
+    ammo += ammonum*2/3*50
+    num = askfort("CLOTHING", cashleft)
+    clothing += num*2/3
+    num = askfort("MISCELLANEOUS SUPPLIES", cashleft)
+    misc += num*2/3
+    totalmilage -= 45
+    
+    
+
+
 
 instructions()
 purchases()

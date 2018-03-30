@@ -16,6 +16,8 @@ Adapted to python by Lev Giffune - 2018
 List of variables at end of file
 """
 
+import time
+
 cashleft = 700
 fortflag = -1
 injuryflag = illnessflag = southpassflag = bluemountainsflag = totalmilage = southpassmilageflag = turnnumber = 0
@@ -129,7 +131,7 @@ def askfort(string, cashleft):
     print string
     number = input()
     if number < 0:
-        return
+        return 0
     cashleft -= number
     if cashleft < 0:
         print "YOU DON'T HAVE THAT MUCH--KEEP YOUR SPENDING DOWN"
@@ -259,14 +261,30 @@ def stopatfort(food, ammo, clothing, misc, cashleft):
     misc += num*2/3
     totalmilage -= 45
     
+def shoot(ammo):
+    maxtime = 7
+    start = time.time()
+    bang = ""
+    
+    while bang != "BANG":
+        print "TYPE BANG"
+        bang = raw_input()
+        ammo -= 1
+    elapsed = time.time() - start
+    elapsed = int(elapsed)
+    if elapsed > maxtime:
+        elapsed = maxtime
+    return elapsed
     
 
-def hunt(ammo, food):
+def hunt(ammo, food, fortflag):
     if ammo < 39:
         print "TOUGH---YOU NEED MORE BULLETS TO GO HUNTING"
         askstopchoice(fortflag)
         return
-    totalmilage -= 45
+    else:
+        totalmilage -= 45
+        shoot(ammo)
 
 instructions()
 purchases()
@@ -280,7 +298,7 @@ B1 = ACTUAL RESPONSE TIME FOR INPUTING 'BANG'
 B2 = MAXIMUM RESPONSE TIME FOR INPUTING 'BANG'
 C = AMOUNT SPENT ON CLOTHING
 C1 = FLAG FOR INSUFFICIENT CLOTHING IN COLD WEATHER
-CS = YES/NO RESPONSE TO QUESTIONS - note: this was C$ in the original program, but python doesn't like that so we use CS
+CS = YES/NO RESPONSE TO QUESTIONS
 D1 = COUNTER IN GENERATING EVENTS
 D3 = TURN NUMBER FOR SETTING DATE
 D4 = CURRENT DATE

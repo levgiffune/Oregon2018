@@ -145,7 +145,7 @@ def purchases():
     print "MONDAY MARCH 29 1847"
     print "\n"
 
-def beginturn():
+def beginturn(food, ammo, clothing, misc, illnessflag, injuryflag, southpassmilageflag, cashleft, fortflag):
     if food < 0:
         food = 0
     if ammo < 0:
@@ -163,6 +163,27 @@ def beginturn():
         if cashleft < 0:
             cashleft = 0
             die()
+        print "DOCTOR'S BILL IS $20"
+        illnessflag = injuryflag = 0
+    if southpassmilageflag == 1:
+        print "TOTAL MILEAGE IS 950"
+        southpassmilageflag = 0
+    else:
+        print "TOTAL MILEAGE IS", totalmilage
+    print "FOOD: ",food, "BULLETS: ",ammo, "CLOTHING: ",clothing, "MISC. SUPP.: ",misc ,"CASH: ",cashleft
+    if fortflag != -1:
+        fortflag *= -1
+        print "DO YOU WANT TO (1) STOP AT THE NEXT FORT, (2) HUNT, "
+        print "OR (3) CONTINUE"
+        choice = input()
+        if choice < 1 or choice > 2:
+            choice = 3
+    else:
+        print "DO YOU WANT TO (1) HUNT, OR (2) CONTINUE"
+        if choice == 1:
+            choice ++
+        else:
+            choice = 2
             
 def die():
     print "YOU CAN'T AFFORD A DOCTOR"
@@ -177,11 +198,11 @@ def die():
     print "FORMALITIES WE MUST GO THROUGH"
     print "\n"
     print "WOULD YOU LIKE A MINISTER?"
-    answer = input
+    answer = input()
     print "WOULD YOU LIKE A FANCY FUNERAL?"
-    answer = input
+    answer = input()
     print "WOULD YOU LIKE US TO INFORM YOUR NEXT OF KIN?"
-    answer = input
+    answer = input()
     print "YOUR AUNT NELLIE IN ST. LOUIS IS ANXIOUS TO HEAR"
     print "\n"
     print "WE THANK YOU FOR THIS INFORMATION AND WE ARE SORRY YOU"
@@ -189,10 +210,12 @@ def die():
     print "BETTER LUCK NEXT TIME"
     print "\n\n"
     print "\t\t\t\tSINCERELY"
+    print "\t\tTHE OREGON CITY CHAMBER OF COMMERCE"
+    exit()
 
-die()
-#instructions()
-#purchases()
+instructions()
+purchases()
+beginturn(food, ammo, clothing, misc, illnessflag, injuryflag, southpassmilageflag, cashleft, fortflag)
 
 
 """

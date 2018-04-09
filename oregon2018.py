@@ -16,11 +16,11 @@ Adapted to python by Lev Giffune - 2018
 List of variables at end of file
 """
 
-import time
+import time, random
 
 cashleft = 700
 fortflag = -1
-injuryflag = illnessflag = southpassflag = bluemountainsflag = totalmilage = southpassmilageflag = turnnumber = 0
+injuryflag = illnessflag = southpassflag = bluemountainsflag = totalmilage = southpassmilageflag = turnnumber = insufficientclothing = blizzard = 0
 
 def instructions():
 
@@ -86,6 +86,8 @@ def askanimals():
     elif animals > 300:
         print "TOO MUCH"
         askanimals()
+    elif animals == "":
+        animals = 0
 
 def askfood():
     print "HOW MUCH DO YOU WANT TO SPEND ON FOOD"
@@ -159,7 +161,7 @@ def purchases():
     print "MONDAY MARCH 29 1847"
     print "\n"
 
-def beginturn(food, ammo, clothing, misc, illnessflag, injuryflag, southpassmilageflag, cashleft, fortflag):
+def turn(food, ammo, clothing, misc, illnessflag, injuryflag, southpassmilageflag, cashleft, fortflag, insufficientclothing, blizzard, totalmilage, animals):
     if food < 0:
         food = 0
     if ammo < 0:
@@ -185,10 +187,12 @@ def beginturn(food, ammo, clothing, misc, illnessflag, injuryflag, southpassmila
     else:
         print "TOTAL MILEAGE IS", totalmilage
     print "FOOD:",food, "BULLETS:",ammo, "CLOTHING:",clothing, "MISC. SUPP.:",misc ,"CASH:",cashleft
-    askstopchoice(fortflag)
-    eat()
+    askstopchoice(fortflag, totalmilage)
+    eat(food)
+    totalmilage += 200+(animals-220)/5+random.randint(0, 10)
+    insufficientclothing = blizzard = 0
 
-def askstopchoice(fortflag):
+def askstopchoice(fortflag, totalmilage):
     if fortflag != -1:
         fortflag *= -1
         print "DO YOU WANT TO (1) STOP AT THE NEXT FORT, (2) HUNT, "
@@ -208,8 +212,10 @@ def askstopchoice(fortflag):
         fortflag *= -1
     if choice == 1:
         stopatfort()
+        totalmilage -= 45
     elif choice == 2:
         hunt(ammo, food)
+        totalmilage -= 45
     elif choice == 3:
         return
     else:
@@ -218,7 +224,7 @@ def askstopchoice(fortflag):
 def die(injuryflag, cause="injorill"):
     if cause == "starvation":
         print "YOU RAN OUT OF FOOD AND STARVED TO DEATH"
-        deathcause == "STARVATION"
+        deathcause = "STARVATION"
     elif cause == "injorill":
         print "YOU CAN'T AFFORD A DOCTOR"
         if injuryflag == 1:
@@ -234,11 +240,11 @@ def die(injuryflag, cause="injorill"):
     print "FORMALITIES WE MUST GO THROUGH"
     print "\n"
     print "WOULD YOU LIKE A MINISTER?"
-    answer = input()
+    answer = raw_input()
     print "WOULD YOU LIKE A FANCY FUNERAL?"
-    answer = input()
+    answer = raw_input()
     print "WOULD YOU LIKE US TO INFORM YOUR NEXT OF KIN?"
-    answer = input()
+    answer = raw_input()
     print "YOUR AUNT NELLIE IN ST. LOUIS IS ANXIOUS TO HEAR"
     print "\n"
     print "WE THANK YOU FOR THIS INFORMATION AND WE ARE SORRY YOU"
@@ -259,10 +265,9 @@ def stopatfort(food, ammo, clothing, misc, cashleft):
     clothing += num*2/3
     num = askfort("MISCELLANEOUS SUPPLIES", cashleft)
     misc += num*2/3
-    totalmilage -= 45
     
 def shoot(ammo):
-    maxtime = 7
+    maxtime = 100
     start = time.time()
     bang = ""
     
@@ -275,20 +280,44 @@ def shoot(ammo):
     if elapsed > maxtime:
         elapsed = maxtime
     return elapsed
-    
 
-def hunt(ammo, food, fortflag):
+def hunt(ammo, food):
     if ammo < 39:
         print "TOUGH---YOU NEED MORE BULLETS TO GO HUNTING"
         askstopchoice(fortflag)
         return
     else:
-        totalmilage -= 45
-        shoot(ammo)
+        elapsed = shoot(ammo)
+        if elapsed <= 1:
+            print "RIGHT BETWEEN THE EYES---YOU GOT A BIG ONE!!!!"
+            food += 52+random.randint(0, 6)
+            ammo -= 10-random.randint(0, 4)
+        elif random.randint(1,101) < 13*elapsed:
+            print "SORRY---NO LUCK TODAY"
+        else:
+            print "NICE SHOT--RIGHT THROUGH THE NECK--FEAST TONIGHT!!"
+            food += 48-2*elapsed
+            ammo -=10-3*ammo
+        if food < 13:
+            die(injuryflag, "starvation")
+            
+def eat(food):
+    print "DO YOU WANT TO EAT (1) POORLY  (2) MODERATELY"
+    print "OR (3) WELL"
+    rations = input()
+    if rations > 3 or rations < 1:
+        eat(food)
+    else:
+        food -= 8-5*rations
+        if food < 0:
+            food += 8+5*rations
+            print "YOU CAN'T EAT THAT WELL"
+            eat(food)
 
 instructions()
 purchases()
-beginturn(food, ammo, clothing, misc, illnessflag, injuryflag, southpassmilageflag, cashleft, fortflag)
+while True:
+    turn(food, ammo, clothing, misc, illnessflag, injuryflag, southpassmilageflag, cashleft, fortflag, insufficientclothing, blizzard, totalmilage, animals)
 
 
 """

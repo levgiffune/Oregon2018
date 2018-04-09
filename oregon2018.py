@@ -302,6 +302,7 @@ def hunt(ammo, food):
             die(injuryflag, "starvation")
             
 def eat(food):
+    global rations
     print "DO YOU WANT TO EAT (1) POORLY  (2) MODERATELY"
     print "OR (3) WELL"
     rations = input()
